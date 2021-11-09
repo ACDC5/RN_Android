@@ -6,8 +6,9 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import type {Node} from 'react';
+import React, {PureComponent} from 'react';
+import store from './src/store'
+import {Provider} from "react-redux";
 import {
   // SafeAreaView,
   // ScrollView,
@@ -18,19 +19,24 @@ import {
   View,
 } from 'react-native';
 import {MyNavigation,MyTabs} from './src'
+import {setAxios} from "./src/service/setAxios";
 
-// import {
-//   Colors,
-//   DebugInstructions,
-//   Header,
-//   LearnMoreLinks,
-//   ReloadInstructions,
-// } from 'react-native/Libraries/NewAppScreen';
 
-const App: () => Node = () => {
-  return (
-      <MyTabs/>
-  );
+class App extends PureComponent{
+
+  componentDidMount(){
+    // setAxios();//请求设置
+  }
+
+  render() {
+    return (
+        <Provider store={store}>
+          <MyTabs/>
+        </Provider>
+
+    );
+  }
+
 };
 
 export default App;

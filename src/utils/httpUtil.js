@@ -3,6 +3,7 @@ import  qs from 'querystring'
 
 export default class httpUtil {
     static get(url, params) {
+        //创建一个Promise实例
         return new Promise(async (resolve, reject) => {
             try {
                 let query = await qs.stringify(params)

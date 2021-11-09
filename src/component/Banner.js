@@ -15,7 +15,6 @@ class Banner extends Component {
     }
 
     render() {
-        console.log('当前设备宽度：',DEVICE_WIDTH)
         const {bannerArr} = this.props
         const {currentBannerIndex} = this.state
         if (!bannerArr) {
@@ -25,9 +24,11 @@ class Banner extends Component {
                 </View>
                 )
         }
+
         return (
             <View>
                 <Swiper
+                    style={styles.imgCarousel}
                     horizontal={true}
                     loop={true}
                     autoplay={true}
@@ -46,11 +47,15 @@ class Banner extends Component {
                     }
                 </Swiper>
                 <View style={styles.bannerHint}>
-                    {/*//TODO*/}
-                    <Text style={styles.bannerText} numberOfLines={1}>字呢？
-                        {bannerArr.map(item => {
-                            return item.title
-                        })}
+                    <Text style={styles.bannerText}>
+                        {/* TODO 没搞懂.bannerArr明明是个数组，这样写bannerArr[currentBannerIndex].title却会报错？非得写判断才正常,而且还非得用instanceof才行！
+                            TODO　原因可能和请求数据的返回时机有关*/}
+                        {bannerArr instanceof Array
+                            ? 'bannerArr[currentBannerIndex].title'
+                            : 'nothing'}
+                    </Text>
+                    <Text style={styles.bannerText}>
+                        {currentBannerIndex + 1}/{bannerArr.length}
                     </Text>
                 </View>
             </View>
@@ -61,6 +66,10 @@ export default Banner;
 
 const imageHeight = dp(380);
 const styles = StyleSheet.create({
+
+    imgCarousel:{
+      height:imageHeight
+    },
     imgBanner: {
         width: DEVICE_WIDTH,
         height: imageHeight,
@@ -83,7 +92,7 @@ const styles = StyleSheet.create({
     },
     bannerText:{
         color:'#FFFFFF',
-        fontSize:dp(28)
+        fontSize:dp(28),
     }
 
 })

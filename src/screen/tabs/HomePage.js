@@ -1,50 +1,36 @@
 import React, {Component} from 'react';
 import {Text, View} from 'react-native';
+import {connect} from "react-redux";
 import {getHomeBanner} from '../../api'
 
 import ArticleItemRow from "../../component/ArticleItemRow";
 import Banner from "../../component/Banner";
 import CommonFlatList from "../../component/CommonFlatList";
+import {fetchHomeBanner} from "../../actions";
 
 
 
 class HomePage extends Component {
 
-    state = {
-        page: 1, // 第一页page为0
-        dataSource: [9,8,7], // 列表数据源
-        homeList: {},
-        homeBanner: [], // 首页轮播数据
-        isRenderFooter: false, // 是否渲染列表footer
-        isFullData: false, // 是否加载完全部数据
-        websites: [], // 常用网站数据
-        isRefreshing:false
-    }
-
-    componentDidMount() {
-        this.onFetchData()
+    async componentDidMount() {
+        await this.onFetchData()
     }
 
     renderItem = ({item,index}) => {
-        return (<Text key={item.id}>{item.imagePath}</Text>)
+        return (<Text key={item.id}>内容列表:{item.imagePath}</Text>)
     }
 
 
 
     //从服务器获取数据
     async onFetchData() {
-        //用promise的then方法获取返回的数据
-        /*getHomeBanner().then(res => {
-            this.setState({homeBanner:res.data.data})
-        })*/
-        //使用async/await写法
-        const bannerData = await getHomeBanner()
-        this.setState({homeBanner:bannerData.data.data})
+        //Promese.all属于Promise的静态方法，所以不需要new实例(道理都懂，突然看到又想不起这个点)
+            await Promise.all([fetchHomeBanner()])
     }
 
     //渲染轮播图
     renderHeader = () => {
-        const {homeBanner} = this.state
+        const {homeBanner} = this.props
         return (
             <View>
                 <Banner
@@ -54,7 +40,7 @@ class HomePage extends Component {
     }
 
     render() {
-        const {homeBanner} = this.state
+        const {homeBanner} = this.props
         return (
             <View  style={{flex:1,alignItems:'center',justifyContent:'center'}}>
                 <CommonFlatList
@@ -62,12 +48,17 @@ class HomePage extends Component {
                     keyExtractor={item => item.id.toString()}
                     renderItem={this.renderItem}
                     ListHeaderComponent={this.renderHeader}
-
                 />
             </View>
-
         );
     }
 }
 
-export default HomePage;
+const mapStateToProps = state => (
+    {
+        homeBanner:state.homeBanner
+    }
+)
+export default connect(mapStateToProps)(HomePage)
+
+

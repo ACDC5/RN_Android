@@ -24,6 +24,7 @@ class Touchable extends Component {
         if(isWithoutFeedback) {
             return (
                 <TouchableWithoutFeedback
+                    style={{backgroundColor: '#00FFF'}}
                     {...this.props}
                     onPress={this.onPreventDoublePress}>
                         {children}
